@@ -34,17 +34,23 @@ sub mock_context {
   sub {
     my ($req) = @_;
     my $c;
-    test_psgi app => sub {
+    my $app = sub {
         my $env = shift;
-        if (eval { $Catalyst::VERSION } >= 5.90070) {
-            Class::Load::load_class('Catalyst::Middleware::Stash');
-            $env->{Catalyst::Middleware::Stash::PSGI_KEY()} //=
-                Catalyst::Middleware::Stash->_create_stash();
-        }
+
+        # legacy implementation handles stash creation via MyApp->prepare
+
         $c = $class->prepare( env => $env, response_cb => sub { } );
-      return [ 200, [ 'Content-type' => 'text/plain' ], ['Created mock OK'] ];
-      },
-      client => sub {
+        return [ 200, [ 'Content-type' => 'text/plain' ], ['Created mock OK'] ];
+    };
+
+    # handle stash-as-middleware implementation from v5.90070
+    if (eval { $Catalyst::VERSION } >= 5.90070) {
+        Class::Load::load_class('Catalyst::Middleware::Stash');
+        $app = Catalyst::Middleware::Stash->wrap($app);
+    }
+
+    test_psgi app => $app,
+    client => sub {
       my $cb = shift;
       $cb->($req);
     };
