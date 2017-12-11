@@ -1,6 +1,8 @@
 Revision history for CatalystX::Test::MockContext
 
 {{$NEXT}}
+
+0.000003  2017-12-11 09:48:31+00:00 Europe/London
   - Add missing version number to release
 
 0.000002  2017-12-11 09:37:45+00:00 Europe/London
