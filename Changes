@@ -1,0 +1,11 @@
+Revision history for CatalystX::Test::MockContext
+
+{{$NEXT}}
+  [Bug Fixes]
+  - Load Catalyst::Middleware::Stash, RT#119477 (Robert Rothenberg)
+
+  [Documentation]
+  - Include Changes file in the distribution (Robert Rothenberg)
+
+0.000001 2012-03-19
+  - Initial release.
